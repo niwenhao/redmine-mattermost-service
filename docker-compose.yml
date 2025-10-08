@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    image: docker.io/postgres:18
+    image: postgres:18
     container_name: pg-main
     restart: unless-stopped
     environment:
@@ -19,7 +19,7 @@ services:
       retries: 10
 
   redmine:
-    image: docker.io/redmine:6.1.0
+    image: redmine:6.1.0
     container_name: redmine
     depends_on:
       db:
@@ -31,14 +31,14 @@ services:
       REDMINE_DB_USERNAME: ${REDMINE_DB_USER}
       REDMINE_DB_PASSWORD: ${REDMINE_DB_PASS}
     ports:
-      - "${REDMINE_PORT:-3000}:3000"
+      - "10033:3000"
     volumes:
       - redmine_files:/usr/src/redmine/files
       - redmine_plugins:/usr/src/redmine/plugins
       - redmine_themes:/usr/src/redmine/public/themes
 
   mattermost:
-    image: docker.io/mattermost/mattermost-team-edition:11.0
+    image: mattermost/mattermost-team-edition:11.0
     container_name: mattermost
     depends_on:
       db:
@@ -52,7 +52,7 @@ services:
       MM_LOGSETTINGS_ENABLECONSOLE: "true"
       MM_PLUGINSETTINGS_ENABLE: "true"
     ports:
-      - "${MATTERMOST_PORT:-8065}:8065"
+      - "10044:8065"
     volumes:
       - mm_config:/mattermost/config
       - mm_data:/mattermost/data
